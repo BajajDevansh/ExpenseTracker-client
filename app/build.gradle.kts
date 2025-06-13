@@ -41,7 +41,7 @@ android {
 
 dependencies {
     val nav_version = "2.9.0"
-
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("androidx.navigation:navigation-ui:2.9.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")

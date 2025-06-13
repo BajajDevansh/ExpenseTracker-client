@@ -20,25 +20,38 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dbajaj.expensetracker.R
+import com.dbajaj.expensetracker.RetrofitClient
+import com.dbajaj.expensetracker.TokenManager
+import com.dbajaj.expensetracker.data.LoginRequest
+import com.dbajaj.expensetracker.viewModel.AuthViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(){
+fun LoginScreen(
+    authViewModel: AuthViewModel
+){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val scope =rememberCoroutineScope()
+    val context=LocalContext.current
     Column(modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
@@ -93,7 +106,28 @@ fun LoginScreen(){
             ElevatedCard(shape = CircleShape,
                 elevation = CardDefaults.cardElevation(10.dp)) {
                 Button(onClick = {
+                    scope.launch {
+                        val loginRequest=LoginRequest(email,password)
+                        try {
+                            val loginResponse= RetrofitClient.authApi.login(loginRequest)
+                            if(loginResponse.jwtToken.isNotEmpty()){
+                                TokenManager.saveSession(
+                                    context = context,
+                                    token = loginResponse.jwtToken,
+                                    username = loginResponse.username,
+                                    userId = loginResponse.userId
+                                )
+                                authViewModel.login(loginResponse.jwtToken)
 
+                            }
+                            email=""
+                            password=""
+                        }catch (e:Exception){
+                            println("Login Failed "+e.message)
+                            email=""
+                            password=""
+                        }
+                    }
                 }, colors = ButtonDefaults.buttonColors(
                     containerColor= Color.Transparent,
                     contentColor = if(isSystemInDarkTheme())Color.White else Color.Black

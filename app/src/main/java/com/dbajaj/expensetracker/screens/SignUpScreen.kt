@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,12 +35,16 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dbajaj.expensetracker.R
+import com.dbajaj.expensetracker.RetrofitClient
+import com.dbajaj.expensetracker.data.UserDTO
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpScreen(){
     var fullName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val scope=rememberCoroutineScope()
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
@@ -114,6 +119,11 @@ fun SignUpScreen(){
             ElevatedCard(shape = CircleShape,
                 elevation = CardDefaults.cardElevation(10.dp)) {
                 Button(onClick = {
+                    scope.launch {
+                        RetrofitClient.authApi.register(UserDTO(
+                            email,fullName,password
+                        ))
+                    }
                     fullName=""
                     email=""
                     password=""
