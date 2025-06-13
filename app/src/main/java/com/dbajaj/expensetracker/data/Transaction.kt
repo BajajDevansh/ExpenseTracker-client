@@ -1,4 +1,4 @@
-package com.dbajaj.expensetracker.models
+package com.dbajaj.expensetracker.data
 
 import java.time.LocalDateTime
 
