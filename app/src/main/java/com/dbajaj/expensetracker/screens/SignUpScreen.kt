@@ -34,13 +34,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.dbajaj.expensetracker.R
 import com.dbajaj.expensetracker.RetrofitClient
 import com.dbajaj.expensetracker.data.UserDTO
 import kotlinx.coroutines.launch
 
 @Composable
-fun SignUpScreen(){
+fun SignUpScreen(navHostController: NavHostController){
     var fullName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -127,6 +128,7 @@ fun SignUpScreen(){
                     fullName=""
                     email=""
                     password=""
+                    navHostController.navigate("login")
                 }, colors = ButtonDefaults.buttonColors(
                     containerColor= Color.Transparent,
                     contentColor = if(isSystemInDarkTheme())Color.White else Color.Black
@@ -138,7 +140,7 @@ fun SignUpScreen(){
         Spacer(modifier = Modifier.height(10.dp))
         Text("Already have an account? Log in", fontSize = 15.sp,
             modifier = Modifier.clickable{
-
+                navHostController.navigate("login")
             })
     }
 }

@@ -54,13 +54,13 @@ fun MyApp(modifier: Modifier= Modifier,authViewModel: AuthViewModel= viewModel()
     }
     NavHost(navController = navController, startDestination = "login"){
         composable("login"){
-            LoginScreen(authViewModel)
+            LoginScreen(authViewModel,navController)
         }
         composable("signUp"){
-            SignUpScreen()
+            SignUpScreen(navController)
         }
         composable("transaction"){
-            TransactionScreen()
+            TransactionScreen(navHostController = navController)
         }
     }
 }

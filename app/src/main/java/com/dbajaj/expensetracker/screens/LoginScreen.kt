@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.dbajaj.expensetracker.R
 import com.dbajaj.expensetracker.RetrofitClient
 import com.dbajaj.expensetracker.TokenManager
@@ -46,7 +47,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    navHostController: NavHostController
 ){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -120,6 +122,7 @@ fun LoginScreen(
                                 authViewModel.login(loginResponse.jwtToken)
 
                             }
+                            navHostController.navigate("transaction")
                             email=""
                             password=""
                         }catch (e:Exception){
@@ -139,7 +142,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(10.dp))
         Text("Don't have an account? Sign Up", fontSize = 15.sp,
             modifier = Modifier.clickable{
-
+                navHostController.navigate("signUp")
             })
     }
 }

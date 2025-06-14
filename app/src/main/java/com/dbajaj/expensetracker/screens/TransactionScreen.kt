@@ -46,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 
 import com.dbajaj.expensetracker.R
 import com.dbajaj.expensetracker.RetrofitClient
@@ -59,7 +60,8 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 @Composable
-fun TransactionScreen(transactionViewModel: TransactionViewModel = viewModel()) {
+fun TransactionScreen(transactionViewModel: TransactionViewModel = viewModel(),
+                      navHostController: NavHostController) {
     val transactions = transactionViewModel.transactions
     val scope=rememberCoroutineScope()
     val context = LocalContext.current
